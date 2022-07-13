@@ -1,8 +1,5 @@
 #!/bin/env sh
 
-#install git
-sudo apt-get install git -y
-
 #install zsh and plugins
 sudo apt-get install zsh -y
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
