@@ -7,11 +7,12 @@ call plug#begin()
 
 " Make sure you use single quotes
 Plug 'Raimondi/delimitMate'
-Plug 'morhetz/gruvbox'
 Plug 'scrooloose/syntastic'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'nanotech/jellybeans.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 " Initialize plugin system
 call plug#end()
 " Comments in Vimscript start with a `"`.
@@ -91,9 +92,8 @@ set shiftwidth=4 " <<, >> 으로 들여쓰기시 사용할 스페이스바 개�
 set smartindent
 set cindent
 
-" clipboard
-set clipboard=unnamed
-
+" clipboard config for copy & paste between vim and system
+set clipboard^=unnamed,unnamedplus
 " encoding
 set fileencodings=utf-8,euc-kr    " 파일 저장 인코딩 : utf-8, euc-kr
 set fencs=ucs-bom,utf-8,euc-kr    " 한글 파일은 euc-kr, 유니코드는 유니코드
@@ -101,21 +101,9 @@ set fencs=ucs-bom,utf-8,euc-kr    " 한글 파일은 euc-kr, 유니코드는 유
 set showmatch    " 다른 코딩 프로그램처럼 매칭되는 괄호 보여줌
 set hlsearch    " 검색 시 하이라이트
 set background=dark
-let g:gruvbox_contrast_dark="hard"
 
 " plugin delimitmate
 let delimitMate_expand_cr=1
-
-" plugin gruvbox
-autocmd vimenter * ++nested colorscheme gruvbox
-if (empty($TMUX))
-  if (has("nvim"))
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
 
 " plugin syntastic
 set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\ " 표시되는 상태바 내용
@@ -132,12 +120,15 @@ let g:syntastic_cpp_compiler = 'g++'
 let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra -Wpedantic"
 let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
 
+let g:syntastic_python_python_exec = 'python3'
+let g:syntastic_python_checkers = ['python']
 " save current file and compile and execute
-map <F8> :w <CR> :!clear; gcc % -o %< && ./%< <CR>
+map <F8> :w <CR> :!clear; g++ % -o %< && ./%< <CR>
 map <F9> :w <CR> :!clear; python3 % <CR>
 
 " indent-guides config
 let g:indent_guides_enable_on_vim_startup = 1
-
+" set airline
 let g:airline_theme='bubblegum'
-
+" set colorscheme
+colorscheme jellybeans
