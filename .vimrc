@@ -123,8 +123,11 @@ let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_checkers = ['python']
 " save current file and compile and execute
-map <F8> :w <CR> :!clear; g++ % -o %< && ./%< <CR>
-map <F9> :w <CR> :!clear; python3 % <CR>
+map <buffer> <F8> :w <CR> :!clear; g++ % -o %< && ./%< <CR>
+imap <buffer> <F8> <esc>:w <CR> :!clear; g++ % -o %< && ./%< <CR>
+
+map <buffer> <F9> :w <CR> :!clear; python3 % <CR>
+imap <buffer> <F9> <esc> :w <CR> :!clear; python3 % <CR>
 
 " indent-guides config
 let g:indent_guides_enable_on_vim_startup = 1
