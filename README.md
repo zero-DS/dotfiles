@@ -19,6 +19,8 @@ dotfiles for Mac OS
 - [ctrlpvim](https://github.com/ctrlpvim/ctrlp.vim)
 
 * press ctrl-p in Vim to open fuzzy finder
+* press \b for openig new buffer, \h for previous buffer
+* press \l for next buffer, \d for closing current buffer
 
 ###### plugins for zsh
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)

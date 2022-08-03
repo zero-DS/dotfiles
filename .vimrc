@@ -12,7 +12,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'nanotech/jellybeans.vim'
-Plug 'ctrlpvim/ctrlp.vim'
 " Initialize plugin system
 call plug#end()
 " Comments in Vimscript start with a `"`.
@@ -79,11 +78,14 @@ inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
+" set colorscheme
+colorschem jellybeans
+
 " CtrlP configs
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-let g:ctrlp_custom_ignore = {'file': '\v\.(exe|zip|swp|so|dll)$'}
+let g:ctrlp_custom_ignore = {'file': '\v\.(exe|swp|so|dll)$'}
 
 " indent configs
 set tabstop=4 " 탭으로 들여쓰기시 사용할 스페이스바 개수. (= ts)
@@ -92,8 +94,9 @@ set shiftwidth=4 " <<, >> 으로 들여쓰기시 사용할 스페이스바 개�
 set smartindent
 set cindent
 
-" clipboard config for copy & paste between vim and system
-set clipboard^=unnamed,unnamedplus
+" clipboard
+set clipboard=unnamed
+
 " encoding
 set fileencodings=utf-8,euc-kr    " 파일 저장 인코딩 : utf-8, euc-kr
 set fencs=ucs-bom,utf-8,euc-kr    " 한글 파일은 euc-kr, 유니코드는 유니코드
@@ -116,6 +119,31 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
  
+" indent-guides config
+let g:indent_guides_enable_on_vim_startup = 1
+
+" set airline
+let g:airline_theme='bubblegum'
+" 버퍼 목록 켜기
+let g:airline#extensions#tabline#enabled = 1
+" 파일명만 출력
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+" 버퍼 새로 열기
+" 원래 이 단축키로 바인딩해 두었던 :tabnew를 대체한다.
+nmap <leader>b :enew<CR>
+" 다음 버퍼로 이동
+nmap <leader>l :bnext<CR>
+" 이전 버퍼로 이동
+nmap <leader>h :bprevious<CR>
+" 현재 버퍼 닫기
+nmap <leader>d :bdelete<CR>
+
+" map semicolon to colon
+nnoremap ; :
+vnoremap ; :
+nnoremap : ;
+
 let g:syntastic_cpp_compiler = 'g++'
 let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra -Wpedantic"
 let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
@@ -129,9 +157,3 @@ imap <buffer> <F8> <esc>:w <CR> :!clear; g++ % -o %< && ./%< <CR>
 map <buffer> <F9> :w <CR> :!clear; python3 % <CR>
 imap <buffer> <F9> <esc> :w <CR> :!clear; python3 % <CR>
 
-" indent-guides config
-let g:indent_guides_enable_on_vim_startup = 1
-" set airline
-let g:airline_theme='bubblegum'
-" set colorscheme
-colorscheme jellybeans
