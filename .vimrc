@@ -142,7 +142,6 @@ nmap <leader>d :bdelete<CR>
 " map semicolon to colon
 nnoremap ; :
 vnoremap ; :
-nnoremap : ;
 
 let g:syntastic_cpp_compiler = 'g++'
 let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra -Wpedantic"
