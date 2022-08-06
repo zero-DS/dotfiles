@@ -151,12 +151,12 @@ let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_checkers = ['python']
 
-nnoremap <silent> <buffer> <F9> :call SaveAndExecutePython()<CR>
-inoremap <silent> <buffer> <F9> <esc> :call SaveAndExecutePython()<CR>
-" vnoremap <silent> <leader><space> :<C-u>call SaveAndExecutePython()<CR>
+
+nnoremap <silent> <buffer> <F5> :call SaveAndExecute()<CR>
+inoremap <silent> <buffer> <F5> <esc> :call SaveAndExecute()<CR>
 
 " https://stackoverflow.com/questions/18948491/running-python-code-in-vim
-function! SaveAndExecutePython()
+function! SaveAndExecute()
     " SOURCE [reusable window]: https://github.com/fatih/vim-go/blob/master/autoload/go/ui.vim
 
     " save and reload current file
@@ -164,11 +164,21 @@ function! SaveAndExecutePython()
 
     " get file path of current file
     let s:current_buffer_file_path = expand("%")
+	let s:current_buffer_file_extenstion = expand("%:e")
+	let s:current_buffer_file_name_for_cpp = "./" . expand("%:r")
 
-    let s:output_buffer_name = "Python"
+	if s:current_buffer_file_extenstion == "py"
+		let s:output_buffer_name = "Python"
+	elseif s:current_buffer_file_extenstion == "c"
+		let s:output_buffer_name = "C"
+	elseif s:current_buffer_file_extenstion == "cpp"
+		let s:output_buffer_name = "C++"
+	endif
+
+	" echom expand("%:e")
     let s:output_buffer_filetype = "output"
 
-    " reuse existing buffer window if it exists otherwise create a new one
+	" reuse existing buffer window if it exists otherwise create a new one
     if !exists("s:buf_nr") || !bufexists(s:buf_nr)
         silent execute 'botright new ' . s:output_buffer_name
         let s:buf_nr = bufnr('%')
@@ -178,64 +188,6 @@ function! SaveAndExecutePython()
     elseif bufwinnr(s:buf_nr) != bufwinnr('%')
         silent execute bufwinnr(s:buf_nr) . 'wincmd w'
     endif
-	
-	silent execute "resize " . winheight(0)/2
-    silent execute "setlocal filetype=" . s:output_buffer_filetype
-    setlocal bufhidden=delete
-    setlocal buftype=nofile
-    setlocal noswapfile
-    setlocal nobuflisted
-    setlocal winfixheight
-    " setlocal cursorline " make it easy to distinguish
-    setlocal nonumber
-    setlocal norelativenumber
-    setlocal showbreak=""
-
-    " clear the buffer
-    setlocal noreadonly
-    setlocal modifiable
-    %delete _
-
-    " add the console output
-    silent execute ".!python3 " . shellescape(s:current_buffer_file_path, 1)
-
-    " make the buffer non modifiable
-    setlocal readonly
-    setlocal nomodifiable
-    if (line('$') == 1 && getline(1) == '')
-      q!
-    endif
-    " silent execute 'wincmd p'
-endfunction
-
-nnoremap <silent> <buffer> <F8> :call SaveAndExecuteCpp()<CR>
-inoremap <silent> <buffer> <F8> <esc> :call SaveAndExecuteCpp()<CR>
-" vnoremap <silent> <leader><space> :<C-u>call SaveAndExecutePython()<CR>
-
-" https://stackoverflow.com/questions/18948491/running-python-code-in-vim
-function! SaveAndExecuteCpp()
-    " SOURCE [reusable window]: https://github.com/fatih/vim-go/blob/master/autoload/go/ui.vim
-
-    " save and reload current file
-    silent execute "update | edit"
-
-    " get file path of current file
-    let s:current_buffer_file_path = expand("%")
-    let s:current_buffer_file_name = "./" . expand("%:r")
-
-    let s:output_buffer_name = "cpp"
-    let s:output_buffer_filetype = "output"
-
-    " reuse existing buffer window if it exists otherwise create a new one
-    if !exists("s:buf_nr") || !bufexists(s:buf_nr)
-        silent execute 'botright new ' . s:output_buffer_name
-        let s:buf_nr = bufnr('%')
-    elseif bufwinnr(s:buf_nr) == -1
-        silent execute 'botright new '
-        silent execute s:buf_nr . 'buffer'
-    elseif bufwinnr(s:buf_nr) != bufwinnr('%')
-        silent execute bufwinnr(s:buf_nr) . 'wincmd w'
-    endif
 
 	silent execute "resize " . winheight(0)/2
     silent execute "setlocal filetype=" . s:output_buffer_filetype
@@ -255,9 +207,12 @@ function! SaveAndExecuteCpp()
     %delete _
 
     " add the console output
-	silent execute ".!g++ " . shellescape(s:current_buffer_file_path, 1) . " -o " . shellescape(s:current_buffer_file_name, 1) 
-	
-	silent execute ".!./" . shellescape(s:current_buffer_file_name, 1)	
+	if s:current_buffer_file_extenstion == "py"
+		silent execute ".!python3 " . shellescape(s:current_buffer_file_path, 1)
+	elseif s:current_buffer_file_extenstion == "c" || s:current_buffer_file_extenstion == "cpp"
+		silent execute ".!g++ " . shellescape(s:current_buffer_file_path, 1) . " -o " . shellescape(s:current_buffer_file_name_for_cpp, 1) 
+		silent execute ".!./" . shellescape(s:current_buffer_file_name_for_cpp, 1)	
+	endif
 
     " make the buffer non modifiable
     setlocal readonly
@@ -267,4 +222,3 @@ function! SaveAndExecuteCpp()
     endif
     " silent execute 'wincmd p'
 endfunction
-
