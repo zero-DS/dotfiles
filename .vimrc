@@ -151,13 +151,6 @@ let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_checkers = ['python']
 
-" save current file and compile and execute
-" map <buffer> <F8> :w <CR> :!clear; g++ % -o %< && ./%< <CR>
-" imap <buffer> <F8> <esc>:w <CR> :!clear; g++ % -o %< && ./%< <CR>
-
-" map <buffer> <F9> :w <CR> :!clear; python3 % <CR>
-" imap <buffer> <F9> <esc> :w <CR> :!clear; python3 % <CR>
-
 nnoremap <silent> <buffer> <F9> :call SaveAndExecutePython()<CR>
 inoremap <silent> <buffer> <F9> <esc> :call SaveAndExecutePython()<CR>
 " vnoremap <silent> <leader><space> :<C-u>call SaveAndExecutePython()<CR>
@@ -185,7 +178,8 @@ function! SaveAndExecutePython()
     elseif bufwinnr(s:buf_nr) != bufwinnr('%')
         silent execute bufwinnr(s:buf_nr) . 'wincmd w'
     endif
-
+	
+	silent execute "resize " . winheight(0)/2
     silent execute "setlocal filetype=" . s:output_buffer_filetype
     setlocal bufhidden=delete
     setlocal buftype=nofile
@@ -205,19 +199,13 @@ function! SaveAndExecutePython()
     " add the console output
     silent execute ".!python3 " . shellescape(s:current_buffer_file_path, 1)
 
-    " resize window to content length
-    " Note: This is annoying because if you print a lot of lines then your code buffer is forced to a height of one line every time you run this function.
-    "       However without this line the buffer starts off as a default size and if you resize the buffer then it keeps that custom size after repeated runs of this function.
-    "       But if you close the output buffer then it returns to using the default size when its recreated
-    "execute 'resize' . line('$')
-
     " make the buffer non modifiable
     setlocal readonly
     setlocal nomodifiable
     if (line('$') == 1 && getline(1) == '')
       q!
     endif
-    silent execute 'wincmd p'
+    " silent execute 'wincmd p'
 endfunction
 
 nnoremap <silent> <buffer> <F8> :call SaveAndExecuteCpp()<CR>
@@ -243,12 +231,13 @@ function! SaveAndExecuteCpp()
         silent execute 'botright new ' . s:output_buffer_name
         let s:buf_nr = bufnr('%')
     elseif bufwinnr(s:buf_nr) == -1
-        silent execute 'botright new'
+        silent execute 'botright new '
         silent execute s:buf_nr . 'buffer'
     elseif bufwinnr(s:buf_nr) != bufwinnr('%')
         silent execute bufwinnr(s:buf_nr) . 'wincmd w'
     endif
 
+	silent execute "resize " . winheight(0)/2
     silent execute "setlocal filetype=" . s:output_buffer_filetype
     setlocal bufhidden=delete
     setlocal buftype=nofile
@@ -269,11 +258,6 @@ function! SaveAndExecuteCpp()
 	silent execute ".!g++ " . shellescape(s:current_buffer_file_path, 1) . " -o " . shellescape(s:current_buffer_file_name, 1) 
 	
 	silent execute ".!./" . shellescape(s:current_buffer_file_name, 1)	
-	" resize window to content length
-    " Note: This is annoying because if you print a lot of lines then your code buffer is forced to a height of one line every time you run this function.
-    "       However without this line the buffer starts off as a default size and if you resize the buffer then it keeps that custom size after repeated runs of this function.
-    "       But if you close the output buffer then it returns to using the default size when its recreated
-    "execute 'resize' . line('$')
 
     " make the buffer non modifiable
     setlocal readonly
@@ -281,5 +265,6 @@ function! SaveAndExecuteCpp()
     if (line('$') == 1 && getline(1) == '')
       q!
     endif
-    silent execute 'wincmd p'
+    " silent execute 'wincmd p'
 endfunction
+
