@@ -23,8 +23,14 @@ sudo apt-get install python3 -y
 sudo apt-get install xclip -y
 sudo apt-get install vim-gtk -y
 
+#install nvm and install node.js for coc.nvim
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+nvm install node
+
 #copy dotfiles to home directory
 cp \.[^\.]* ~/
+source ~/.zshrc
+source ~/.vimrc
 #copy tmux config files to bin directory
 sudo cp tmux-* /usr/local/bin
 

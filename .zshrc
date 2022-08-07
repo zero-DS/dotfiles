@@ -17,3 +17,6 @@ ZSH_AUTOSUGGEST_USE_ASYNC=true
 # 쉬프트+ 탭 누르면 디렉터리 내 자동완성
 bindkey '^[[Z' complete-word
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
