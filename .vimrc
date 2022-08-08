@@ -13,6 +13,10 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'nanotech/jellybeans.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'tree-sitter/tree-sitter'
+Plug 'preservim/tagbar'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
 " Initialize plugin system
 call plug#end()
 " Comments in Vimscript start with a `"`.
@@ -35,7 +39,7 @@ set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
-set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\ " 표시되는 상태바 내용
+set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 
 " The backspace key has slightly unintuitive behavior by default. For example,
 " by default, you can't backspace before the insertion point set with 'i'.
@@ -45,9 +49,7 @@ set backspace=indent,eol,start
 
 " By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
 " shown in any window) that has unsaved changes. This is to prevent you from "
-" forgetting about unsaved changes and then quitting e.g. via `:qa!`. We find
-" hidden buffers helpful enough to disable this protection. See `:help hidden`
-" for more information on this.
+" forgetting about unsaved changes and then quitting e.g. via `:qa!`. 
 set hidden
 
 " This setting makes search case-insensitive when all characters in the string
@@ -65,8 +67,7 @@ nmap Q <Nop> " 'Q' in normal mode enters Ex mode. You almost never want this.
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
-" Enable mouse support. You should avoid relying on this too much, but it can
-" sometimes be convenient.
+" Enable mouse support. 
 set mouse+=a
 
 " Disable arrow keys
@@ -110,7 +111,6 @@ set background=dark
 let delimitMate_expand_cr=1
 
 " plugin syntastic
-set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\ " 표시되는 상태바 내용
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -125,10 +125,18 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " set airline
 let g:airline_theme='bubblegum'
+" let g:airline_powerline_fonts = 1 "https://github.com/powerline/fonts
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
 " 버퍼 목록 켜기
 let g:airline#extensions#tabline#enabled = 1
 " 파일명만 출력
 let g:airline#extensions#tabline#fnamemod = ':t'
+" 상태바 z 구역
+let g:airline_symbols.linenr = ' ␤ '
+let g:airline_symbols.colnr = ' ㏇'
+let g:airline_symbols.maxlinenr = ''
 
 " 버퍼 새로 열기
 " 원래 이 단축키로 바인딩해 두었던 :tabnew를 대체한다.
@@ -150,7 +158,6 @@ let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
 
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_checkers = ['python']
-
 
 nnoremap <silent> <buffer> <F5> :call SaveAndExecute()<CR>
 inoremap <silent> <buffer> <F5> <esc> :call SaveAndExecute()<CR>
@@ -222,3 +229,7 @@ function! SaveAndExecute()
     endif
     " silent execute 'wincmd p'
 endfunction
+
+" tagbar configs; you need to install ctags-exuberant for tagbar
+nmap <F8> :TagbarToggle<CR>
+let g:Tlist_Ctags_Cmd='/usr/local/Cellar/ctags/5.8_1/bin/ctags'

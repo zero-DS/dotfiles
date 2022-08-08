@@ -18,11 +18,16 @@ dotfiles for Mac OS
 - [vim-indent-guides](https://github.com/valloric/vim-indent-guides)
 - [ctrlpvim](https://github.com/ctrlpvim/ctrlp.vim)
 - [neoclide/coc.nvim](https://github.com/neoclide/coc.nvim)
+- [tree-sitter/tree-sitter](https://github.com/tree-sitter/tree-sitter)
+- [preservim/tagbar](https://github.com/preservim/tagbar)
+- [tpope/vim-surround](https://github.com/tpope/vim-surround)
+- [tpope/vim-commentary](https://github.com/tpope/vim-commentary)
 
 * press ctrl-p in Vim to open fuzzy finder
 * press \b for openig new buffer, \h for previous buffer
 * press \l for next buffer, \d for closing current buffer
-* press F5 for save and executing Python/C/C++ source codes
+* press F5 to  save and execute Python/C/C++ source codes
+* press F8 to toggle tagbar
 
 ###### plugins for zsh
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
